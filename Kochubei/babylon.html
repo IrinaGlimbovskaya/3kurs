@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>Falling Boxes. MatterJS, BabylonJS, JavaScript</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babylonjs/4.2.0/babylon.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/matter-js@0.14.2/build/matter.min.js"></script>
+
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+        }
+    </style>
+</head>
+
+<body>
+<canvas id="renderCanvas"></canvas>
+
+<script>
+    let boxBody1, boxBody2;
+    let matterEngine;
+
+    const canvas = document.getElementById("renderCanvas");
+    const engine = new BABYLON.Engine(canvas, true);
+    const scene = new BABYLON.Scene(engine);
+    const camera = new BABYLON.ArcRotateCamera("arcCamera",
+        BABYLON.Tools.ToRadians(-90), BABYLON.Tools.ToRadians(90),
+        15, new BABYLON.Vector3(0, 3, 0), scene);
+    camera.attachControl(canvas, true);
+    camera.wheelPrecision = 100;
+    const light = new BABYLON.HemisphericLight("hemisphericLight", new BABYLON.Vector3(0.1, 1, -0.3), scene);
+
+    const ground = BABYLON.MeshBuilder.CreateGround("ground", { width: 10, height: 10 }, scene);
+
+    const box1 = BABYLON.MeshBuilder.CreateBox("box1", { width: 1, height: 1, depth: 1 }, scene);
+    box1.position.x = 2;
+    box1.position.y = 4;
+
+    const box3 = BABYLON.MeshBuilder.CreateBox("box1", { width: 1, height: 1, depth: 1 }, scene);
+    box1.position.x = 8;
+    box1.position.y = 10;
+
+    const box2 = BABYLON.MeshBuilder.CreateBox("box2", { width: 1, height: 1, depth: 1 }, scene);
+    box2.position.x = -1.5;
+    box2.position.y = 4;
+
+    const staticSphere = BABYLON.MeshBuilder.CreateSphere("staticSphere", { diameter: 1 }, scene);
+    staticSphere.position.x = 2;
+    staticSphere.position.y = 0.5;
+
+    const staticBox = BABYLON.MeshBuilder.CreateBox("staticBox", { width: 1, height: 1, depth: 1 }, scene);
+    staticBox.position.x = -2;
+    staticBox.position.y = 0.5;
+
+    const skybox = BABYLON.MeshBuilder.CreateBox("skybox", { size: 1000 }, scene);
+    skybox.infiniteDistance = true;
+    const skyboxMaterial = new BABYLON.StandardMaterial("skyboxMat", scene);
+    skyboxMaterial.backFaceCulling = false;
+    const files = [
+        "images/skybox_px.jpg",
+        "images/skybox_py.jpg",
+        "images/skybox_pz.jpg",
+        "images/skybox_nx.jpg",
+        "images/skybox_ny.jpg",
+        "images/skybox_nz.jpg",
+    ];
+    skyboxMaterial.reflectionTexture = BABYLON.CubeTexture.CreateFromImages(files, scene);
+    skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+    skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+    skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+    skybox.material = skyboxMaterial;
+
+    engine.runRenderLoop(() => { scene.render(); });
+
+    matterEngine = Matter.Engine.create();
+    matterEngine.world.gravity.y = -1;
+    this.createWallsAndFloor();
+    this.createPhysicsSimulation();
+
+    window.onresize = () => engine.resize();
+
+    function createWallsAndFloor()
+    {
+        boxBody1 = Matter.Bodies.rectangle(200, 400, 100, 100);
+        boxBody2 = Matter.Bodies.rectangle(-150, 400, 100, 100);
+        const staticSphereBody = Matter.Bodies.circle(200, 50, 50, { isStatic: true });
+        const staticBoxBody = Matter.Bodies.rectangle(-200, 50, 100, 100, { isStatic: true });
+        const ground = Matter.Bodies.rectangle(0, -50, 500, 100, { isStatic: true });
+        Matter.World.add(matterEngine.world, [ground, boxBody1, boxBody2,
+            staticSphereBody, staticBoxBody]);
+    }
+
+    function createPhysicsSimulation()
+    {
+        setInterval(
+            () =>
+            {
+                this.updatePhysics();
+            }, 15);
+    }
+
+    function updatePhysics()
+    {
+        Matter.Engine.update(matterEngine);
+
+        box1.position.x = boxBody1.position.x / 100;
+        box1.position.y = boxBody1.position.y / 100;
+        box1.rotation.z = boxBody1.angle;
+
+        box2.position.x = boxBody2.position.x / 100;
+        box2.position.y = boxBody2.position.y / 100;
+        box2.rotation.z = boxBody2.angle;
+    }
+</script>
+</body>
+
+</html>
