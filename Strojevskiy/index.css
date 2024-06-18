@@ -1,0 +1,16 @@
+#student-info {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+#student-info h1 {
+  margin-bottom: 10px;
+}
+
+#student-info p {
+  margin-bottom: 5px;
+}
+
+#student-info span {
+  font-weight: bold;
+}

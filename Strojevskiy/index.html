@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+    <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="index.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap">
+    <style>
+        #audioButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #7B68EE;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+	<audio id="audioPlayer" src="../audio/Strojevskiy.m4a"></audio>
+        <button id="audioButton" onclick="toggleAudio()">
+            <img id="audioIcon" src="../images/volume-on.png" alt="Audio Icon" width="30" height="30">
+        </button>
+
+        <script>
+            var audio = document.getElementById('audioPlayer');
+            var audioButton = document.getElementById('audioButton');
+            var audioIcon = document.getElementById('audioIcon');
+
+            function toggleAudio() {
+                if (audio.paused) {
+                    audio.play();
+                    audioIcon.src = "../images/volume-on.png";
+                } else {
+                    audio.pause();
+                    audioIcon.src = "../images/volume-off.png";
+                }
+            }
+            audio.volume = 0.7;
+        </script>
+	<div id="student-info">
+	  <h1>Student Information</h1>
+	  <p>Me: <image src = "reva.jpg"></image></p>
+	  <p>Name: <span id="student-name"></span></p>
+	  <p>Age: <span id="student-age"></span></p>
+	  <p>Grade: <span id="student-grade"></span></p>
+	  <p>Info: <span id="student-about"></span></p>
+	</div>
+</body>
+
+<script type="text/javascript">
+	// Define student object
+	var student = {
+	  name: "Дмитрий Строжевский",
+	  age: 16,
+	  grade: 10,
+	  about: "Самый красивый, умный и обоятельный студент группы ПИ"
+	};
+
+	// Update HTML with student information
+	document.getElementById("student-name").innerHTML = student.name;
+	document.getElementById("student-age").innerHTML = student.age;
+	document.getElementById("student-grade").innerHTML = student.grade;
+	document.getElementById("student-about").innerHTML = student.about;
+
+</script>
+</html>
