@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Это просто Я</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+      #audioButton {
+          position: fixed;
+          top: 20px;
+          right: 20px;
+          background-color: #7B68EE;
+          color: white;
+          border: none;
+          padding: 5px 10px;
+          font-size: 16px;
+          cursor: pointer;
+          border-radius: 5px;
+      }
+  </style>
+  <style type="text/css">
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    h1 {
+      font-size: 50px;
+      margin-top: 30px;
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 18px;
+    }
+    .container{
+      background: rgb(0, 0, 0);
+      width: 100%;
+      color: azure;
+    }
+    .body{
+      box-shadow:40px 40px 70px 40px rgba(66, 66, 66, 0.5);  
+    }
+    .body{
+      background-color: black;
+    }
+    #foto{
+      margin-left: auto;
+      margin-right: auto;
+    }
+  </style>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap">
+
+</head>
+
+<body>
+
+  <audio id="audioPlayer" src="../audio/Outro_ Tear.mp3"></audio>
+        <button id="audioButton" onclick="toggleAudio()">
+            <img id="audioIcon" src="../images/volume-on.png" alt="Audio Icon" width="30" height="30">
+        </button>
+
+        <script>
+            var audio = document.getElementById('audioPlayer');
+            var audioButton = document.getElementById('audioButton');
+            var audioIcon = document.getElementById('audioIcon');
+
+            function toggleAudio() {
+                if (audio.paused) {
+                    audio.play();
+                    audioIcon.src = "../images/volume-on.png";
+                } else {
+                    audio.pause();
+                    audioIcon.src = "../images/volume-off.png";
+                }
+            }
+            audio.volume = 0.3;
+        </script>
+
+  <div class="container" id="chet">
+    <div class="row">
+      <div class="col-12">
+        <h1>Лаптуров Вадим Александрович</h1>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <p>Я человек, который совершенно не умеет рассказывать о себе. Итак. Мне 19 (на момент написания этой страницы), как все учился в школе.
+          И в поиске новых знаний и себя пошёл в университет. 
+        </p>
+        <p>В плане программрования у меня появился интерес классе в 8-ом. Как все школьники учил Pascal. Учавствовал в олимпиадах, занимал места.
+          Подумал, что это моё и вот я здесь.
+        </p>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="foto">
+        <a href="search.html"><img src="me.jpg"></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="chet">
+    <div class="row">
+      <div class="col-12">
+        <h2>Мои увлечения и интересы (помимо программрования)</h2>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+        <p><a href="https://ru.wikipedia.org/wiki/%D0%92%D0%B5%D0%B4%D1%8C%D0%BC%D0%B0%D0%BA_(%D1%81%D0%B5%D1%80%D0%B8%D1%8F_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD%D0%BE%D0%B2)">Вселенная Ведьмака Анджая Сапковского</a></p>
+        <p><a href="https://www.youtube.com/watch?v=I8LV3lgTg8M">История феодальной Японии периода Сэнгоку Дзидай</a></p>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-3 col-xl-3">
+        <p><a href="https://jamato.ru/yaponskoe-oruzhie/17-vidy-yaponskogo-oruzhiya-obshchaya-kharakteristika/">Традиционное оружие и доспехи самураев</a></p>
+        <p><a href="https://muzlada.net/9060-luchshaja-rok-muzyka-vseh-vremen.html">Рок-музыка</a></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Вселенная Ведьмака Анджая Сапковского</h2>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <p>В плане чтения как средства развлечения, жанр фентези подходит отлично. <a href="https://ru.wikipedia.org/wiki/%D0%92%D0%B5%D0%B4%D1%8C%D0%BC%D0%B0%D0%BA_(%D1%81%D0%B5%D1%80%D0%B8%D1%8F_%D1%80%D0%BE%D0%BC%D0%B0%D0%BD%D0%BE%D0%B2)">
+          Серия романов Анджая Сапковского "Ведьмак" </a> интереснейшие произведения 
+          из всех, которые мне доводилось прочесть. Любимой книгой данной серии для меня навсегда останется <a href="https://knijky.ru/books/vedmak"> "Последнее желание"</a>. Для пополнения знаний относительно данного мира можно прочесть дополнительные книги других авторов по
+          данной вселенной.
+        </p>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="foto">
+        <img src="witcher.jpg">
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="chet">
+    <div class="row">
+      <div class="col-12">
+        <h2>История феодальной Японии периода Сэнгоку Дзидай</h2>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+       <br> <img src="japan.jpg" id="foto">
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <p> Каждый человек должен знать как минимум историю своего народа. Но, помимо этого, можно увлекаться и историей другой страны.<a href="https://www.youtube.com/watch?v=I8LV3lgTg8M"> Феодальная Япония </a>
+          всегда привлекала меня своей особой культурой и традициями. Японские учения, философия и моральные наставления привлекали своеобразной точкой зрения на мир, хизнь и смерть.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Традиционное оружие и доспехи самураев</h2>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <p> 
+          Почему-то все думают, что самураи пользовались только катанами, но на самом деле это не так. В японском боевом прошлом было
+          <a href="https://jamato.ru/yaponskoe-oruzhie/17-vidy-yaponskogo-oruzhiya-obshchaya-kharakteristika">три эпохи вооружений </a>: Эра лука, эра копья и эра меча. Боевые исскуства самураев сильно отличались от европейских.
+          Если в Европе заботились о защите человека во время боя, то в Японии залогом выживания была мобильность. Оружие и доспехи были идеально
+          сделаны для данной задачи.
+        </p>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6" id="foto"> <br>
+        <img src="samurai.jpg">
+      </div>
+    </div>
+  </div>
+
+  <div class="container" id="chet">
+    <div class="row">
+      <div class="col-12">
+        <h2>Рок-музыка</h2>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+       <br> 
+       <div class="all">
+        <div id="slider">
+  
+            <input checked type="radio" name="slider" id="switch1">
+            <input type="radio" name="slider" id="switch2">
+            <input type="radio" name="slider" id="switch3">
+            <input type="radio" name="slider" id="switch4">
+            <input type="radio" name="slider" id="switch5">
+  
+          <div id="slides">
+            <div id="overflow">
+              <div class="image">
+                <div>
+                  <audio src="System.mp3" controls></audio>
+                  <img src="arch.png" >
+                </div>
+                <div>
+                  <audio src="Nirvana.mp3" controls></audio>
+                  <img src="system.png">
+                </div>
+                <div>
+                  <audio src="Epica.mp3" controls></audio>
+                  <img src="nirvana.png">
+                </div>
+                <div>
+                  <audio src="Rammstein.mp3" controls></audio>
+                  <img src="epica.png">
+                </div>
+                <div>
+                  <img src="rammstein.png">
+                  <audio src="Arch.mp3" controls></audio>
+                </div>
+              </div>
+            </div>
+          </div>
+  
+          <div id="controls">
+            <label for="switch1"></label>
+            <label for="switch2"></label>
+            <label for="switch3"></label>
+            <label for="switch4"></label>
+            <label for="switch5"></label>
+          </div>
+          
+        </div>
+    </div>
+      </div>
+      <div class="col-12 col-sm-12 col-md-6 col-lg-6 col-xl-6">
+        <p> Рок - это лучший жанр музыки. Рок наполняет человека энергией и максимально положительными эмоциями.
+          Тяжёлая музыка не является причиной агрессивного поведения, а, напротив, помогает успокоиться и упорядочить свои мысли, справиться с раздражением и усталостью.
+          Назовём это музыкальной психотерапией.Психологи из Оксфордского университета Брукса в Великобритании провели исследование, чтобы узнать какую музыку слушают умные люди. Оказалось, что самыми интеллектуально-развитыми оказались любители джаза, классики, рока и электронной музыки.
+          Задумайтесь...
+        </p>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h2>Контакты для связи</h2>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <p>Телефон: +373 775 38 610      Не звоните мне...</p>
+        <p>Почта: humrik15@gmail.com    И не пишите мне...</p>
+        <p>Телеграм: @Malkawyan    Нигде</p>
+		<p><a href="DvsL.docx">Laragon</a> <a href="https://laragon.org/download/index.html">download</a></p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

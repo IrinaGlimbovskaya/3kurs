@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Портфолио</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap">
+    <style>
+        #audioButton {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background-color: #7B68EE;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+<body>
+    <audio id="audioPlayer" src="../audio/niholat.m4a"></audio>
+    <button id="audioButton" onclick="toggleAudio()">
+        <img id="audioIcon" src="../images/volume-on.png" alt="Audio Icon" width="30" height="30">
+    </button>
+
+    <script>
+        var audio = document.getElementById('audioPlayer');
+        var audioButton = document.getElementById('audioButton');
+        var audioIcon = document.getElementById('audioIcon');
+
+        function toggleAudio() {
+            if (audio.paused) {
+                audio.play();
+                audioIcon.src = "../images/volume-on.png";
+            } else {
+                audio.pause();
+                audioIcon.src = "../images/volume-off.png";
+            }
+        }
+        audio.volume = 0.4;
+    </script>
+
+      <div class="editProfile">
+        <img src="photo4.jpg"  class="fhoto" width="201px" height="315px" >
+      </div>
+      <div class="information">
+         <div class="information-text">
+            <p> &nbsp; Нихолат Александра Эдуардовна </p>
+         </div>
+         <div class="infoblock">
+                <p> Дата рождения:  1.09.2003</p>
+                <p> Среднее образование: средняя общеобразовательная школа №6 с л/к </p>
+                <p> Высшее образование: Рыбницкий филиал ПГУ им. Т. Г. Шевченко </p>
+                <p> Специальность:  Программная инженерия </p>
+                <p> Курс:  3 </p>
+                <p> Электронная почта: alexandra.2003qwer@gmail.com</p>
+				<a href="https://www.youtube.com/watch?v=NKV8YGIqS_Q"><p> Курсовая работа 1 курса: </p></a>
+				<a href="kurs.pdf"><img src="photo5.png"  class="fhoto2" width="50px" height="55px" ></a>
+				<p> Доклад на тему генетический алгоритм: </p>
+                <a href="Нихолат.html"><img src="photo5.png"  class="fhoto2" width="50px" height="55px" ><p>Практика </p></a>
+				<a href="gen.pdf"><img src="photo5.png"  class="fhoto2" width="50px" height="55px" ></a>
+				<p> Доклад на тему автоматизация ecxel с помощью pyhton: </p>
+				<a href="exel.txt"><img src="photo5.png"  class="fhoto2" width="50px" height="55px" ></a>
+				<p> Нейронная сеть </p>
+				<a href="neiro.py"><img src="photo5.png"  class="fhoto2" width="50px" height="55px" ></a>
+                <p align="center"> Вредное животное: </p>
+                <div class="photblock">
+                    <img src="photo2.jpg"  class="fhoto1" width="386px" height="300px" >
+                    <img src="photo3.jpg"  class="fhoto1" width="386px" height="300px" >
+                </div>
+         </div>
+    </div>  
+</body>
+</html>

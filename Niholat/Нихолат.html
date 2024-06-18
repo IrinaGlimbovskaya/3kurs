@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ping Pong Game</title>
+    <style>
+        body {
+            background:white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        canvas {
+            background: black;
+        }
+        #welcomeMessage {
+            color: black;
+            font-size: 40px;
+            text-align: center;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div id="welcomeMessage">Добро пожаловать в игру! <br> Выберите соперника:</div>
+    <button onclick="startGame(true)">Играть с искусственным игроком</button>
+    <button onclick="startGame(false)">Играть с другим игроком</button>
+    <canvas id="gameCanvas" width="900" height="500" tabindex="1"></canvas>
+    <audio id="paddleHitSound" preload="auto">
+        <source src="paddle_hit.wav" type="audio/wav">
+    </audio>
+    <audio id="pointScoredSound" preload="auto">
+        <source src="point_scored.wav" type="audio/wav">
+    </audio>
+    <audio id="wallHitSound">
+        <source src="wall_hit.wav" type="audio/wav">
+    </audio>
+    
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const canvasWidth = canvas.width;
+        const canvasHeight = canvas.height;
+
+        let ballX = canvasWidth / 2;
+        let ballY = canvasHeight / 2;
+        let ballSpeedX = 4;
+        let ballSpeedY = 4;
+
+        let paddle1Y = canvasHeight / 2 - 50;
+        let paddle2Y = canvasHeight / 2 - 50;
+        const PADDLE_HEIGHT = 100;
+        const PADDLE_WIDTH = 15;
+        let PADDLE_SPEED = 19;
+
+        let playerScore = 0;
+        let opponentScore = 0;
+        const WIN_SCORE = 15;
+
+        let isPlayingWithAI = false;
+
+        const paddleHitSound = document.getElementById("paddleHitSound");
+        const pointScoredSound = document.getElementById("pointScoredSound");
+
+        function drawBall(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 13, 0, Math.PI * 2);
+            ctx.fillStyle = "white";
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawPaddle(x, y, color) {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, PADDLE_WIDTH, PADDLE_HEIGHT);
+        }
+
+        function drawScores() {
+            ctx.fillStyle = "white";
+            ctx.font = "40px Arial";
+            ctx.fillText(` ${playerScore}`, canvasWidth * 0.3, 50);
+            ctx.fillText(`${opponentScore}`, canvasWidth * 0.6, 50);
+        }
+
+        function drawSeparatorLine() {
+            ctx.strokeStyle = "white";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([10, 5]);
+            ctx.beginPath();
+            ctx.moveTo(canvasWidth / 2, 0);
+            ctx.lineTo(canvasWidth / 2, canvasHeight);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function update() {
+            ballX += ballSpeedX;
+            ballY += ballSpeedY;
+
+            if (ballY < 0 || ballY > canvas.height) {
+                ballSpeedY = -ballSpeedY;
+                wallHitSound.play();
+            }
+
+            if (
+                (ballX < PADDLE_WIDTH * 2 && ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) ||
+                (ballX > canvas.width - PADDLE_WIDTH * 2 && ballY > paddle2Y && ballY < paddle2Y + PADDLE_HEIGHT)
+            ) {
+                ballSpeedX = -ballSpeedX;
+                paddleHitSound.play(); // Проигрывание звука при отскоке мяча от ракетки
+            }
+
+            if (ballX < 0) {
+                opponentScore++;
+                pointScoredSound.play(); // Проигрывание звука при голе
+                resetBall();
+            } else if (ballX > canvas.width) {
+                playerScore++;
+                pointScoredSound.play(); // Проигрывание звука при голе
+                resetBall();
+            }
+
+            if (playerScore >= WIN_SCORE || opponentScore >= WIN_SCORE) {
+                endGame();
+            }
+
+            if (isPlayingWithAI) {
+                updateOpponentPositionAI();
+            }
+
+        }
+
+        function resetBall() {
+            ballX = canvas.width / 2;
+            ballY = canvas.height / 2;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+            drawSeparatorLine();
+            drawBall(ballX, ballY);
+            drawPaddle(PADDLE_WIDTH, paddle1Y, "green");
+            drawPaddle(canvasWidth - PADDLE_WIDTH * 2, paddle2Y, "blue");
+            drawScores();
+
+            update();
+
+            requestAnimationFrame(draw);
+        }
+
+        function endGame() {
+            if (playerScore >= WIN_SCORE) {
+                alert("Поздравляем! Вы выиграли!");
+            } else {
+                alert("К сожалению, вы проиграли.");
+            }
+        }
+
+        function updateOpponentPositionAI() {
+            const targetY = ballY - PADDLE_HEIGHT / 2;
+            const diffY = targetY - paddle2Y;
+
+            if (diffY > PADDLE_SPEED) {
+                paddle2Y += PADDLE_SPEED;
+            } else if (diffY < -PADDLE_SPEED) {
+                paddle2Y -= PADDLE_SPEED;
+            }
+
+            paddle2Y = Math.min(Math.max(paddle2Y, 0), canvasHeight - PADDLE_HEIGHT);
+        }
+
+        function handleKeyDown(event) {
+            if (event.key === 'w') {
+                paddle1Y -= PADDLE_SPEED;
+            } else if (event.key === 's') {
+                paddle1Y += PADDLE_SPEED;
+            }
+            paddle1Y = Math.min(Math.max(paddle1Y, 0), canvasHeight - PADDLE_HEIGHT);
+        }
+
+        function handleKeyDownPlayer2(event) {
+            if (event.key === 'ArrowUp') {
+                paddle2Y -= PADDLE_SPEED;
+            } else if (event.key === 'ArrowDown') {
+                paddle2Y += PADDLE_SPEED;
+            }
+            paddle2Y = Math.min(Math.max(paddle2Y, 0), canvasHeight - PADDLE_HEIGHT);
+        }
+
+        function startGame(playWithAI) {
+            isPlayingWithAI = playWithAI;
+
+            const welcomeMessage = document.getElementById("welcomeMessage");
+            welcomeMessage.style.display = "none";
+
+            canvas.style.display = "block";
+
+            document.removeEventListener('keydown', handleKeyDown);
+            document.removeEventListener('keydown', handleKeyDownPlayer2);
+
+            document.addEventListener('keydown', handleKeyDown);
+
+            if (!isPlayingWithAI) {
+                document.addEventListener('keydown', handleKeyDownPlayer2);
+            }
+
+            playerScore = 0;
+            opponentScore = 0;
+            resetBall();
+
+            draw();
+        }
+    </script>
+</body>
+</html>
