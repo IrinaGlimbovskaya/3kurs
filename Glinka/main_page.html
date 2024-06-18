@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Мой новостной сайт</title>
+  <meta charset="UTF-8">
+  <meta name="author" content="Глинка Илья">
+  <title>Gl_PROGER</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+  <style>
+    #audioButton {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #7B68EE;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        font-size: 16px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+</style>
+  <style>
+        .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 40px;
+      background-color: #ffffff;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #333333;
+    }
+    
+    p {
+      color: #666666;
+      line-height: 1.5;
+    }
+    
+    h1 {
+      text-align: center;
+      color: #333333;
+    }
+    
+    /* Стили для размещения изображения и информации */
+    .profile-image {
+      display: block;
+      max-width: 200px;
+      height: auto;
+      margin: 0 auto;
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+    
+    .profile-info {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+
+  </style>
+
+</head>
+
+<body>
+  <audio id="audioPlayer" src="../audio/Glinka1.m4a"></audio>
+        <button id="audioButton" onclick="toggleAudio()">
+            <img id="audioIcon" src="../images/volume-on.png" alt="Audio Icon" width="30" height="30">
+        </button>
+
+        <script>
+            var audio = document.getElementById('audioPlayer');
+            var audioButton = document.getElementById('audioButton');
+            var audioIcon = document.getElementById('audioIcon');
+
+            function toggleAudio() {
+                if (audio.paused) {
+                    audio.play();
+                    audioIcon.src = "../images/volume-on.png";
+                } else {
+                    audio.pause();
+                    audioIcon.src = "../images/volume-off.png";
+                }
+            }
+            audio.volume = 0.7;
+        </script>
+  <ul class="navbar">
+    <li><a href="main_page.html">Главная</a></li>
+    <li><a href="index.html">Мини проекты</a></li>
+    <li><a href="#">О нас</a></li>
+    <li><a href="contact.html">Контакты</a></li>
+  </ul>
+
+  <div class="container">
+    <h1>Информация о разрабочике этого сайта</h1>
+  
+    <img src="img/image.jpg" alt="Фото профиля" class="profile-image">
+  
+    <div class="profile-info">
+      <h2>Илья Александрович Глинка</h2>
+      <p>Возраст: 20 лет</p>
+      <p>Студент 3 курса Программной инженерии</p>
+      <p>Информация о студенте:Илья Глинка, студент программной инженерии, обладает средними знаниями и навыками в области разработки программного обеспечения. С его творческим мышлением, страстью к кодированию и желанием создавать инновационные решения, он является настоящим активом для нашей команды.
+        Однако, его увлечение программированием - не единственная сторона его таланта. Наш герой также является Кандидатом в Мастера Спорта по шашкам, продемонстрировав выдающиеся навыки и стратегическое мышление в этой известной настольной игре. Он достиг высокого уровня игры и заслуженно получил этот почётный титул.</p>
+    </div>
+  </div>
+</body>
+
+</html>

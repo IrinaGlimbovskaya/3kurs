@@ -1,0 +1,67 @@
+import psutil
+import tkinter as tk
+from tkinter.messagebox import showinfo
+
+#Нагрузка процессора
+def get_cpu_load():
+    return psutil.cpu_percent(interval=1)
+
+#Загрузка Озу
+def get_memory_usage():
+    return psutil.virtual_memory().percent
+
+#Нагрузка диска
+def get_disk_usage():
+    return psutil.disk_usage('/').percent
+
+#Обновление результатов
+def update_stats():
+    cpu_load = get_cpu_load()
+    memory_usage = get_memory_usage()
+    disk_usage = get_disk_usage()
+
+    """
+    if cpu_load > 90:
+        showinfo(title="ЦПУ", message="Подозрительно высокая активность процессора!\n")
+    if memory_usage > 95:
+        showinfo(title="ОЗУ", message="Освободите ОЗУ, выключите неиспользуемые программы! \n"
+    """
+
+
+    cpu_label.config(text=f"ЦПУ: {cpu_load}%")
+    memory_label.config(text=f"ОЗУ: {memory_usage}%")
+    disk_label.config(text=f"Диск: {disk_usage}%")
+
+    root.after(1000, update_stats)
+
+root = tk.Tk()
+
+# Получаем размеры экрана
+screen_width = root.winfo_screenwidth()
+screen_height = root.winfo_screenheight()
+
+# Устанавливаем позицию окна в нижнем правом углу
+window_width = 100  # Ширина окна
+window_height = 70  # Высота окна
+x = screen_width - window_width  # Координата X
+y = screen_height - window_height  # Координата Y
+root.geometry(f"{window_width}x{window_height}+{x-50}+{y-50}")
+
+# Устанавливаем прозрачность
+root.attributes("-alpha", 0.65)  # Значение должно быть от 0.0 до 1.0
+root.resizable(False, False)#размер окна фиксирован
+root.overrideredirect(True)
+root.attributes("-topmost", True) #асположить выше всех
+
+cpu_label = tk.Label(root)
+cpu_label.pack()
+
+memory_label = tk.Label(root)
+memory_label.pack()
+
+disk_label = tk.Label(root)
+disk_label.pack()
+
+update_stats()
+root.bind("<Escape>", lambda event: root.destroy())
+root.mainloop()

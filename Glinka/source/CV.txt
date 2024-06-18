@@ -1,0 +1,264 @@
+from tkinter import Frame, Canvas, Button, Tk, filedialog, Scrollbar, Label, Menu
+from PIL import Image, ImageDraw, ImageTk, ImageFilter
+import tkinter as tk
+import tkinter.ttk as ttk
+import colorsys
+import pytesseract
+#C:\Program Files\Tesseract-OCR
+pytesseract.pytesseract.tesseract_cmd = 'C:\\Program Files\\Tesseract-OCR\\tesseract.exe'
+
+global FILE_NAME
+global lang
+lang = 'rus+eng'
+
+class Example(Frame):
+    def __init__(self, parent):
+        Frame.__init__(self, parent)
+        self.parent = parent
+        self.create_menu()
+        self.Tess_text()
+
+        self.image = None
+        self.photo = None
+
+        self.display = Canvas(self.parent, width=900, height=750, bg="gray")
+        self.display_img = self.display.create_image(0, 0)
+        self.display.place(x=980, y=30)
+        # self.display.pack()
+
+    # Открытие фото с подбором размера под окно, а также распознаванием
+    def open(self):
+        self.filename = filedialog.askopenfilename()
+        self.image = Image.open(self.filename)
+        # self.image =self.image.filter(ImageFilter.FIND_EDGES)
+        # self.image = self.image.filter(ImageFilter.CONTOUR)
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")
+        self.scr1 = Scrollbar(root, command=self.display.yview, orient='vertical')
+        self.scr1.place(x=980, y=714)
+        self.scr2 = Scrollbar(root, command=self.display.xview, orient="horizontal")
+        self.scr2.place(x=997, y=765)
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.scale = 1
+        self.display.bind("<ButtonPress-1>", self.move_start)
+        self.display.bind("<B1-Motion>", self.move_move)
+
+    # Выбор языка
+    def ok(self):
+        self.lang = self.tlang.get()
+        if self.lang == 'Русский':
+            self.lang = 'rus'
+        elif self.lang == 'Английский':
+            self.lang = 'eng'
+        text.delete(1.0, tk.END)
+        config = r'--oem 3 --psm 6'
+        text.insert(1.0, pytesseract.image_to_string(self.image, lang=self.lang, config=config))
+
+    # Перемещение фото
+    def move_start(self, event):
+        self.display.scan_mark(event.x, event.y)
+
+    def move_move(self, event):
+        self.display.scan_dragto(event.x, event.y, gain=1)
+
+    # Поворот изображения влево на 90 гр.
+    def im_rotate_left(self):
+        self.image = self.image.rotate(90, expand=True)
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")
+
+    # Поворот изображения в право на 90 гр.
+    def im_rotate_right(self):
+        self.image = self.image.rotate(-90, expand=True)
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")
+
+    # Уменьшение изображения под размер окна
+    def zoom_open(self):
+        (width, height) = self.image.size
+        while width > 900:
+            width = width - width // 20  # -5%
+            height = height - height // 20  # -5%
+        self.image = self.image.resize((width, height), Image.ANTIALIAS)
+
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")
+
+    # Увеличение изображения
+    def zoom_plus(self):
+        (width, height) = self.image.size
+        width = width + width // 20  # +5%
+        height = height + height // 20  # +5%
+        self.image = self.image.resize((width, height), Image.ANTIALIAS)
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")
+
+    # Уменьшение изображения под размер окна
+    def zoom_minus(self):
+        (width, height) = self.image.size
+        width = width - width // 20  # -5%
+        height = height - height // 20  # -5%
+        self.image = self.image.resize((width, height), Image.ANTIALIAS)
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")
+
+    # Сохранить файл
+    def save_file(self):
+        data = text.get('1.0', tk.END)
+        out = open(FILE_NAME, 'w')
+        out.write(data)
+        out.close()
+
+    # Сохранить как
+    def save_as(self):
+        out = filedialog.asksaveasfile(mode='w',
+                                       defaultextension='.txt',
+                                       filetypes=[("Текстовые файлы", "*.txt"),
+                                                  ("Документ Microsoft Word", "*.doc")])
+        data = text.get('1.0', tk.END)
+        try:
+            out.write(data.rstrip())
+        except Exception:
+            tk.showerror(title="Oops!", message="Unable to save file....")
+
+    # Бинаризация PIL для цветных фото, точность высокая(+85%)
+    def binar(self):
+        ld = self.image.load()
+        width, height = self.image.size
+        for y in range(height):
+            for x in range(width):
+                r, g, b = ld[x, y]
+                h, s, v = colorsys.rgb_to_hsv(r / 255., g / 255., b / 255.)
+                if s > 0.5:
+                    ld[x, y] = (0, 0, 0)
+                else:
+                    ld[x, y] = (255, 255, 255)
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")
+
+    # Отправка в тессеракт
+    def Tesseract_text(self):
+        config = r'--oem 3 --psm 6'
+        text.insert(1.0, pytesseract.image_to_string(self.image, lang=lang, config=config))
+
+    # Окно текста
+    def Tess_text(self):
+        lf2 = tk.LabelFrame(root, text="Текст", width=800, height=400)
+        lf2.place(x=160, y=25)
+        global text
+        text = tk.Text(lf2, width=85, height=35, font='Times 14')
+        scrollb = Scrollbar(lf2, command=text.yview)
+        scrollb.pack(side="right", fill="y")
+        text.configure(yscrollcommand=scrollb.set)
+        text.pack()
+
+    # Окно "помощь"
+    def winspravka(self):
+        spr = Tk()
+        spr.title("Помощь")
+        spr.geometry("700x600+600+200")
+        l = Label(spr, text='Параметры файла')
+        l.place(x=22, y=30)
+        spr.resizable(width=False, height=False)
+        spr.iconbitmap('12.ico')
+        spr.mainloop()
+
+    # Окно "О программе"
+    def winprog(self):
+        spr1 = Tk()
+        spr1.title("О программе")
+        spr1.geometry("350x250+750+340")
+
+        l1 = Label(spr1, text='OkoText 1.0\n'
+                              ' Выпущена: 01.06.2021\n\n'
+                              ' Над программой работал студент\n'
+                              ' первого курса ПИ Глинка Илья\n'
+                              ' Компания "GLinka Software" ', font='Times 14')
+        l1.place(x=22, y=30)
+        spr1.resizable(width=False, height=False)
+        spr1.attributes('-toolwindow', True)
+        spr1.iconbitmap('12.ico')
+        spr1.mainloop()
+
+    # Элементы управления
+    def create_menu(self):
+        menu = Menu(self.parent)
+        self.file_menu = Menu(menu)
+        self.spravka = Menu(menu)
+        menu.add_cascade(label="Файл", menu=self.file_menu)
+        menu.add_cascade(label="Справка", menu=self.spravka)
+        self.file_menu.add_command(label="Открыть", command=self.open)
+        self.file_menu.add_command(label="Сохранить", command=self.save_file)
+        self.file_menu.add_command(label="Сохранить как...", command=self.save_as)
+        self.file_menu.add_command(label="Очистить", command=lambda: text.delete(1.0, tk.END))
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Выход")
+        self.spravka.add_command(label="Помощь", command=self.winspravka)
+        self.spravka.add_separator()
+        self.spravka.add_command(label="О программе", command=self.winprog)
+
+        label_fail = Label(root, text='Параметры файла')
+        label_fail.place(x=22, y=30)
+        self.btn_open = Button(text="Открыть", height=2, width=12,
+                               command=self.open)
+        self.btn_open.place(x=25, y=60)
+        self.btn_save = Button(text="Сохранить", height=2, width=12,
+                               command=self.save_file)
+        self.btn_save.place(x=25, y=105)
+        self.btn_save = Button(text="Сохранить как...", height=2, width=12,
+                               command=self.save_as)
+        self.btn_save.place(x=25, y=150)
+        self.btn_save = Button(text="Очистка", height=2, width=12,
+                               command=lambda: text.delete(1.0, tk.END))
+        self.btn_save.place(x=25, y=195)
+        self.btn_clear = Button(text="Эмоц. окрас", height=2, width=12) #в мечтах
+        self.btn_clear.place(x=25, y=240)
+        self.btn_exit = Button(text="Выход", height=2, width=12,
+                               command=root.destroy)
+        self.btn_exit.place(x=25, y=285)
+        self.btn_ras = Button(text="Распознать", background='gray40',
+                              height=2, width=12, font='Times 12',
+                              command=self.Tesseract_text)
+        self.btn_ras.place(x=1760, y=810)
+        self.btn_bin = Button(text="Бинаризация", background='gray40',
+                              height=2, width=12, font='Times 12',
+                              command=self.binar)
+        self.btn_bin.place(x=1630, y=810)
+        label_l = Label(root, text='Масштаб        '
+                                   '        Поворот', font='Times 14')
+        label_l.place(x=1030, y=795)
+        self.btn_left = Button(text="Подгон размера",
+                               background='gray40', height=1, width=14,
+                               font='Times 14', command=self.zoom_open)
+        self.btn_left.place(x=990, y=860)
+        self.btn_left = Button(text="+90°", background='gray40',
+                               height=1, width=5, font='Times 14',
+                               command=self.im_rotate_left)
+        self.btn_left.place(x=1230, y=820)
+        self.btn_right = Button(text="-90°", background='gray40',
+                                height=1, width=5, font='Times 14',
+                                command=self.im_rotate_right)
+        self.btn_right.place(x=1160, y=820)
+        self.btn_plus = Button(text="+", background='gray40',
+                               height=1, width=5, font='Times 14',
+                               command=self.zoom_plus)
+        self.btn_plus.place(x=1070, y=820)
+        self.btn_minus = Button(text="-", background='gray40',
+                                height=1, width=5, font='Times 14',
+                                command=self.zoom_minus)
+        self.btn_minus.place(x=1000, y=820)
+        self.sslang = ("Русский", "Английский")
+        self.tlang = ttk.Combobox(root, values=self.sslang, state="readonly", width=12)
+        c = ttk.Button(root, text="Применить", command=self.ok)
+        c.place(x=170, y=840)
+        self.tlang.current(0)
+        self.tlang.place(x=170, y=810)
+        self.parent.config(menu=menu)
+
+if __name__ == '__main__':
+    root = Tk()
+    root.title("Распознавание текста - Илья Глинка")
+    root.geometry("1920x1080")
+    app = Example(root)
+    root.mainloop()

@@ -1,0 +1,61 @@
+/* Стилизация навигационной панели */
+ul.navbar {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #333;
+    overflow: hidden;
+  }
+  
+  ul.navbar li {
+    float: left;
+  }
+  
+  ul.navbar li a {
+    display: block;
+    color: #fff;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+  }
+  
+  ul.navbar li a:hover {
+    background-color: #555;
+  }
+  
+  /* Стилизация блока новостей */
+  .news {
+    margin-top: 20px;
+  }
+  
+  .news .item {
+    display: flex;
+    margin-bottom: 20px;
+    background-color: #f1f1f1;
+    padding: 10px;
+  }
+  
+  .news .item img {
+    width: 200px;
+    height: 150px;
+    margin-right: 10px;
+  }
+  
+  .news .item h3 {
+    margin: 0;
+    color: #333;
+  }
+  
+  .news .item p {
+    color: #666;
+  }
+  p {
+
+    scroll-behavior: smooth;
+  }
+  .scale {
+    transition: 1s; /* Время эффекта */
+   }
+   .scale:hover {
+    transform: scale(1.2); /* Увеличиваем масштаб */
+   }
